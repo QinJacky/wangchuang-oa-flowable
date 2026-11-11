@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangchuan.workflow.mapper.BizTableMapper">
+
+    <resultMap type="BizTable" id="BizTableResult">
+        <result property="id"           column="id"          />
+        <result property="tableName"    column="table_name"  />
+        <result property="comment"      column="comment"     />
+        <result property="status"       column="status"      />
+        <result property="delFlag"      column="del_flag"    />
+        <result property="remark"       column="remark"      />
+        <result property="createId"     column="create_id"   />
+        <result property="createBy"     column="create_by"   />
+        <result property="createTime"   column="create_time" />
+        <result property="updateId"     column="update_id"   />
+        <result property="updateBy"     column="update_by"   />
+        <result property="updateTime"   column="update_time" />
+        <result property="columnCount"  column="column_count"/>
+    </resultMap>
+
+    <sql id="selectBizTableVo">
+        select id, table_name, comment, status, del_flag, remark,
+               create_id, create_by, create_time, update_id, update_by, update_time,
+               (select count(1) from t_biz_table_column c where c.table_id = t.id and c.del_flag = '0') as column_count
+        from t_biz_table t
+    </sql>
+
+    <select id="selectBizTableList" parameterType="BizTable" resultMap="BizTableResult">
+        <include refid="selectBizTableVo"/>
+        <where>
+            <if test="tableName != null and tableName != ''"> and table_name like concat('%', #{tableName}, '%')</if>
+            <if test="comment != null and comment != ''"> and comment like concat('%', #{comment}, '%')</if>
+            <if test="status != null and status != ''"> and status = #{status}</if>
+            <if test="delFlag != null and delFlag != ''"> and del_flag = #{delFlag}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectBizTableById" parameterType="String" resultMap="BizTableResult">
+        <include refid="selectBizTableVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBizTableOptionList" resultMap="BizTableResult">
+        select id, table_name, comment, status, del_flag
+        from t_biz_table
+        where del_flag = '0' and status = '1'
+        order by create_time desc
+    </select>
+
+    <insert id="insertBizTable" parameterType="BizTable">
+        insert into t_biz_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="tableName != null">table_name,</if>
+            <if test="comment != null">comment,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createId != null">create_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateId != null">update_id,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="tableName != null">#{tableName},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createId != null">#{createId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateId != null">#{updateId},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBizTable" parameterType="BizTable">
+        update t_biz_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tableName != null">table_name = #{tableName},</if>
+            <if test="comment != null">comment = #{comment},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createId != null">create_id = #{createId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateId != null">update_id = #{updateId},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBizTableById" parameterType="String">
+        update t_biz_table set del_flag = '1' where id = #{id}
+    </delete>
+
+    <delete id="deleteBizTableByIds" parameterType="String">
+        update t_biz_table set del_flag = '1' where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

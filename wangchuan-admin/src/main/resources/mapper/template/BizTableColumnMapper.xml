@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wangchuan.workflow.mapper.BizTableColumnMapper">
+
+    <resultMap type="BizTableColumn" id="BizTableColumnResult">
+        <result property="id"          column="id"          />
+        <result property="tableId"     column="table_id"    />
+        <result property="columnName"  column="column_name" />
+        <result property="comment"     column="comment"     />
+        <result property="dbType"      column="db_type"     />
+        <result property="length"      column="length"      />
+        <result property="formType"    column="form_type"   />
+        <result property="columnOptions" column="column_options" />
+        <result property="isPk"        column="is_pk"       />
+        <result property="isIndex"     column="is_index"    />
+        <result property="isNullable"  column="is_nullable" />
+        <result property="sort"        column="sort"        />
+        <result property="delFlag"     column="del_flag"    />
+        <result property="createTime"  column="create_time" />
+        <result property="updateTime"  column="update_time" />
+    </resultMap>
+
+    <sql id="selectBizTableColumnVo">
+        select id, table_id, column_name, comment, db_type, length, form_type, column_options,
+               is_pk, is_index, is_nullable, sort, del_flag, create_time, update_time
+        from t_biz_table_column
+    </sql>
+
+    <select id="selectBizTableColumnByTableId" parameterType="String" resultMap="BizTableColumnResult">
+        <include refid="selectBizTableColumnVo"/>
+        where table_id = #{tableId} and del_flag = '0'
+        order by sort asc, create_time asc
+    </select>
+
+    <insert id="insertBizTableColumn" parameterType="BizTableColumn">
+        insert into t_biz_table_column
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">id,</if>
+            <if test="tableId != null">table_id,</if>
+            <if test="columnName != null">column_name,</if>
+            <if test="comment != null">comment,</if>
+            <if test="dbType != null">db_type,</if>
+            <if test="length != null">length,</if>
+            <if test="formType != null">form_type,</if>
+            <if test="columnOptions != null">column_options,</if>
+            <if test="isPk != null">is_pk,</if>
+            <if test="isIndex != null">is_index,</if>
+            <if test="isNullable != null">is_nullable,</if>
+            <if test="sort != null">sort,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">#{id},</if>
+            <if test="tableId != null">#{tableId},</if>
+            <if test="columnName != null">#{columnName},</if>
+            <if test="comment != null">#{comment},</if>
+            <if test="dbType != null">#{dbType},</if>
+            <if test="length != null">#{length},</if>
+            <if test="formType != null">#{formType},</if>
+            <if test="columnOptions != null">#{columnOptions},</if>
+            <if test="isPk != null">#{isPk},</if>
+            <if test="isIndex != null">#{is_index},</if>
+            <if test="isNullable != null">#{isNullable},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteBizTableColumnByTableId" parameterType="String">
+        delete from t_biz_table_column where table_id = #{tableId}
+    </delete>
+
+    <delete id="deleteBizTableColumnByTableIds" parameterType="String">
+        delete from t_biz_table_column where table_id in
+        <foreach item="tableId" collection="array" open="(" separator="," close=")">
+            #{tableId}
+        </foreach>
+    </delete>
+</mapper>
