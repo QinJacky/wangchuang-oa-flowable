@@ -2,8 +2,8 @@ package com.wangchuan.admin.convert.service;
 
 import com.wangchuan.common.config.wangchuanConfig;
 import com.wangchuan.common.exception.base.BaseException;
-import com.wangchuan.admin.business.domain.FileStorage;
-import com.wangchuan.admin.business.service.IFileStorageService;
+import com.wangchuan.admin.domain.FileStorage;
+import com.wangchuan.admin.service.IFileStorageService;
 import com.wangchuan.admin.convert.module.ConvertFileDTO;
 import com.wangchuan.admin.storage.context.FileServerContext;
 import com.wangchuan.admin.storage.copy.domain.CopyFile;

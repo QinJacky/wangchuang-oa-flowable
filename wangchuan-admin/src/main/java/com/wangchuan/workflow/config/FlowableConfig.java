@@ -35,7 +35,7 @@ public class FlowableConfig implements EngineConfigurationConfigurer<SpringProce
         engineConfiguration.setAsyncExecutorActivate(false);
 
         // 启用表自动创建/更新（首次启动自动建 act_* 流程表）
-        engineConfiguration.setDatabaseSchemaUpdate("true");
+        engineConfiguration.setDatabaseSchemaUpdate("false");
     }
 
     @Bean
