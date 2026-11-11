@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= webpackConfig.name %></title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- 内置的浏览器版本提示弹窗 -->
+    <script>
+      var ua = navigator.userAgent
+      var isIE = ua.indexOf('compatible') > -1 && ua.indexOf('MSIE') > -1
+      var isEdge = ua.indexOf('Edge') > -1
+      if (isIE || isEdge) {
+        document.write('<div style="padding:50px;text-align:center;font-size:18px;color:#ff4d4f;">当前浏览器版本过低，请使用 Chrome / Edge / Firefox 等现代浏览器访问系统。</div>')
+      }
+    </script>
+  </body>
+</html>
