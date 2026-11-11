@@ -44,7 +44,6 @@ wangchuan-oa-flowable
 ├── wangchuan-common/        # 公共模块（工具类、核心 domain、Redis 封装、安全、常量等）
 ├── sql/                     # 数据库脚本
 │   ├── table.sql           # 表结构（需先执行）
-│   └── data.sql            # 初始化数据（后执行）
 ├── doc/                     # 其他文档
 └── LICENSE
 ```
@@ -58,12 +57,9 @@ wangchuan-oa-flowable
 ```bash
 # 登录 MySQL 后执行（顺序不能反）
 mysql> source /path/to/sql/table.sql
-mysql> source /path/to/sql/data.sql
 ```
 
 - `table.sql`：建表（含业务表与字典、用户等基础表）。
-- `data.sql`：插入初始化数据（管理员账号、字典、菜单等）。
-- Flowable 流程引擎表（`act_*`）**无需手动建**，应用首次启动会自动创建（见 `application.yml` 中 `flowable.database-schema-update: true`）。
 
 ### 2. 调整基础配置
 
