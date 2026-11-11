@@ -139,7 +139,7 @@ export default {
   watch: {
     selectedRoles: {
       handler(val) {
-        if (val && val.length > 0) {
+        if (Array.isArray(val) && val.length > 0) {
           this.selectedRoleList = val;
           this.checkedRoles = val.map((role) => role.roleId);
           // 处理已选择栏
@@ -151,9 +151,9 @@ export default {
           this.selectedRoleList = [];
         }
       },
+      immediate: true,
+      deep: true,
     },
-    immediate: true,
-    deep: true,
   },
   created() {
     this.getList();

@@ -418,7 +418,11 @@ export default {
       this.lf.fitView(20);
       // 极端情况下 fitView 仍放大（极少数节点），限制最大 1:1
       const s = this.lf.graphModel.transformModel.SCALE_X;
-      if (s > 1) this.lf.zoom(1);
+      if (s > 1) {
+        this.lf.zoom(1);
+        // zoom(1) 只改缩放不改平移，必须再 translateCenter() 重新居中，否则图会偏离中心
+        if (typeof this.lf.translateCenter === "function") this.lf.translateCenter();
+      }
     },
     zoomViewport(zoomIn = true) {
       this.lf && this.lf.zoom(zoomIn);

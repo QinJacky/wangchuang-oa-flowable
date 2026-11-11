@@ -57,8 +57,8 @@ export default {
     return {
       // 选人组件开关
       open: false,
-      // 当前选中的用户
-      selectedUsers: [],
+      // 当前选中的用户（用 prop 初始化，避免首次渲染时 watcher 未触发导致不回显）
+      selectedUsers: Array.isArray(this.checkedUsers) ? this.checkedUsers : [],
       // 选人类型：multiple-多选，single-单选
       type: "multiple",
       baseApi: process.env.VUE_APP_BASE_API,
@@ -68,11 +68,11 @@ export default {
   watch: {
     checkedUsers: {
       handler(val) {
-        this.selectedUsers = val || [];
+        this.selectedUsers = Array.isArray(val) ? val : [];
       },
+      deep: true,
+      immediate: true,
     },
-    deep: true,
-    immediate: true,
   },
   methods: {
     /** 头像处理 */

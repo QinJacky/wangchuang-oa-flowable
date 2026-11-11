@@ -217,8 +217,10 @@ function buildNodeXml(n, idMap, defaultEdgeOf) {
 
   const nid = idMap[n.id];
   const def = defaultEdgeOf[n.id] ? ` default="${defaultEdgeOf[n.id]}"` : "";
-  let inner = childParts.join("");
+  // BPMN schema：extensionElements 必须位于内容模型最前（紧跟 documentation，早于 loopCharacteristics / rendering 等）
+  let inner = "";
   if (extParts.length) inner += `<bpmn:extensionElements>${extParts.join("")}</bpmn:extensionElements>`;
+  inner += childParts.join("");
   let xml;
   if (inner) {
     xml = `    <${bpmnType} id="${nid}" name="${name}"${attrs}${def}>${inner}</${bpmnType}>\n`;
@@ -240,9 +242,9 @@ function buildEdgeXml(e, idMap) {
     extParts.push(`<flowable:conditions>${esc(JSON.stringify(p.conditions))}</flowable:conditions>`);
   if (p.isDefault) extParts.push(`<flowable:isDefault>true</flowable:isDefault>`);
   let children = "";
-  // BPMN schema 要求：conditionExpression 必须在 extensionElements 之前
-  if (expr) children += `<bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${esc(expr)}</bpmn:conditionExpression>`;
+  // BPMN schema：extensionElements 必须位于内容模型最前（早于 conditionExpression / loopCharacteristics / rendering 等）
   if (extParts.length) children += `<bpmn:extensionElements>${extParts.join("")}</bpmn:extensionElements>`;
+  if (expr) children += `<bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${esc(expr)}</bpmn:conditionExpression>`;
   const tagOpen = `    <bpmn:sequenceFlow id="${eid}" sourceRef="${src}" targetRef="${tgt}"`;
   const xml = children ? `${tagOpen}>${children}</bpmn:sequenceFlow>\n` : `${tagOpen} />\n`;
   return { xml };
@@ -313,7 +315,7 @@ export function graphToBpmn(graph, processInfo = { id: "", name: "" }) {
              xmlns:flowable="http://flowable.org/bpmn"
              targetNamespace="http://www.flowable.org/processdef">
   <bpmn:process id="${esc(pid)}" name="${esc(pname)}" isExecutable="true">
-${shapes}${flows}${procInner}  </bpmn:process>
+${procInner}${shapes}${flows}  </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="${esc(pid)}">
 ${di}    </bpmndi:BPMNPlane>

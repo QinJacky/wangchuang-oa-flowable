@@ -72,6 +72,9 @@ export default {
     reset() {
       const el = modelerStore.getElement(this.id);
       const p = (el && el.properties) || {};
+
+      console.log("读取到的节点信息：=========");
+      console.log(p);
       this.formData = {
         assigneeType: p.assigneeType || "fixedUser",
         assigneeValue: p.assigneeValue || "",
@@ -81,6 +84,7 @@ export default {
     buildPairs(ids, names) {
       const idArr = (ids || "").split(",").filter(Boolean);
       const nameArr = (names || "").split(",").filter(Boolean);
+      console.log(idArr,nameArr);
       return idArr.map((id, i) => ({ id, name: nameArr[i] || id }));
     },
     onTypeChange() {

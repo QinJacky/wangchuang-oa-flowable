@@ -98,6 +98,7 @@ public class FlowDefinitionServiceImpl extends FlowServiceFactory implements IFl
      */
     @Override
     public void saveFile(String name, String category, String xml) {
+        log.info("xml的内容是：{}",xml);
         try (
                 InputStream in = new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8))
         ) {
@@ -105,8 +106,8 @@ public class FlowDefinitionServiceImpl extends FlowServiceFactory implements IFl
             ProcessDefinition definition = repositoryService.createProcessDefinitionQuery().deploymentId(deploy.getId()).singleResult();
             repositoryService.setProcessDefinitionCategory(definition.getId(), category);
         } catch (Exception e) {
-            log.error("保存/部署流程文件失败:", e);
-            throw new FlowableException(e.getMessage(), e);
+            log.error("保存/部署流程文件失败:{}", e);
+            throw new BaseException("保存/部署流程文件失败");
         }
     }
 
